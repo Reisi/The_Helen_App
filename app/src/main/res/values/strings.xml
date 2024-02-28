@@ -1,0 +1,216 @@
+<resources>
+    <!-- Application name -->
+    <string name="app_name">Helen</string>
+
+    <!-- Service -->
+    <string name="notification_message_default">waiting for connections</string>
+    <string name="notification_message_and">and</string>
+    <string name="notification_message_connected">connected</string>
+
+    <!-- Search Top App Bar -->
+    <string name="app_title">Helen Control</string>
+    <string-array name="main_menu">
+        <item>Demo mode</item>
+        <item>Theme</item>
+    </string-array>
+    <string-array name="theme_options">
+        <item>use system default</item>
+        <item>use bright theme</item>
+        <item>use dark theme</item>
+    </string-array>
+
+    <!-- Search Screen -->
+    <string name="bluetooth_disabled">Bluetooth is disabled</string>
+    <string name="turn_on">Turn on</string>
+    <string name="location_disabled">Location is disabled</string>
+    <string name="open_settings">Open settings</string>
+    <string name="location_permission_rational">
+        To scan for bluetooth devices location permission is required.
+        The scan report not just information about the discovered devices, but also the signal
+        strength. These information allows conclusion to be drawn abut the position of your phone.
+        This app does not use these information in any kind, it just uses the device information to
+        determinate if it is compatible and to connect.
+    </string>
+    <string name="bluetooth_permission_rational">
+        To scan for and connect to compatible devices the bluetooth scan and connect permissions are required.
+    </string>
+    <string name="location_permission_denied">
+        To scan for bluetooth devices location permission is required.
+        Please grant permission to localization, otherwise it is not possible to scan for compatible devices.
+    </string>
+    <string name="bluetooth_permission_denied">
+        To scan for and connect to compatible devices the bluetooth scan and connect permissions are required.
+        Please grant permission to scan and connect to bluetooth devices, otherwise this app cannot work as intended.
+    </string>
+    <string name="search_start">Search and connect</string>
+    <string name="search_stop">Stop search</string>
+    <string name="connected_devices">Connected devices:</string>
+    <string name="disconnected_devices">Disconnected devices:</string>
+    <string name="dummy_devices">Dummy devices:</string>
+    <string name="incompatible_devices">Incompatible devices:</string>
+    <string name="swipe_to_disconnect">Disconnect</string>
+    <string name="swipe_to_remove">Remove</string>
+    <string name="delete_bond">Delete</string>
+    <string name="keep_bond">Keep</string>
+    <string name="delete_bond_heading">Delete Bond?</string>
+    <string name="delete_bond_info">
+        Do you want to delete the bonding information for this device, too?\n\n
+        If you deleted the bonds or performed a factory reset on your lamp you should also delete
+        the bond information on your phone, otherwise it is not possible to reconnect to your lamp.
+    </string>
+    <string-array name="device_status">
+        <item>connecting…</item>
+        <item>connected</item>
+        <item>disconnected</item>
+        <item>dummy</item>
+        <item>unsupported</item>
+    </string-array>
+
+    <!-- device top app bar -->
+    <string name="back">back</string>
+    <string name="new_name">Enter new name</string>
+    <string name="remote_control">Remote control</string>
+    <string name="initiate_search">Initiate Search</string>
+    <string name="factory_reset">Factory Reset</string>
+    <string name="factory_reset_hint">
+        This will reset the device to factory defaults.
+        All your configuration, setup and connection information with remote controls and other devices will be deleted
+    </string>
+    <string name="simple_mode">Simple mode</string>
+    <string name="expert_mode">Expert mode</string>
+
+    <!-- device tabs -->
+    <string-array name="tabScreen_Headings">
+        <item>status</item>
+        <item>config</item>
+        <item>setup</item>
+        <item>terminal</item>
+    </string-array>
+    <string name="write_mode_success">Update successful</string>
+    <string name="write_mode_failed">Update failed</string>
+    <string-array name="set_mode_status">
+        <item> </item> <!-- success is not shown as message -->
+        <item>Requesting current mode is not supported</item>
+        <item>Requesting current mode failed</item>
+    </string-array>
+    <string-array name="initiate_search_status">
+        <item>Search for remotes successfully initiated.</item>
+        <item>Initiating search for remotes over Bluetooth not supported.</item>
+        <item>Initiating search for remotes failed.</item>
+    </string-array>
+    <string-array name="factory_reset_status">
+        <item>Device successfully reset to factory defaults.</item>
+        <item>Factory reset over Bluetooth not supported.</item>
+        <item>Factory reset failed.</item>
+    </string-array>
+    <string-array name="name_change_status">
+        <item>Device name successfully changed</item>
+        <item>Changing of device name not supported</item>
+        <item>New Device Name too long</item>
+        <item>Changing of device name failed</item>
+    </string-array>
+
+    <!-- device status tab -->
+    <string name="device_model">Model Name:</string>
+    <string name="device_hardware_rev">Hardware Rev.:</string>
+    <string name="device_firmware_rev">Firmware Rev.:</string>
+    <string name="available">available</string>
+    <string name="update">Update</string>
+    <string name="changelog">Changelog:</string>
+    <string name="firmware_updating">updating…</string>
+    <string name="device_off">off</string>
+    <string name="current_mode">current mode</string>
+    <string name="select_mode">select mode</string>
+    <string name="not_available">not available</string>
+    <string name="output_power">output power</string>
+    <string name="temperature">temperature</string>
+    <string name="input_voltage">input voltage</string>
+    <string name="state_of_charge">state of charge</string>
+    <string name="watt">W</string>
+    <string name="degree_celcius">°C</string>
+    <string name="volt">V</string>
+    <string name="percent">%</string>
+
+    <!-- device config dialog -->
+    <string name="mode_ignored">ign.</string>
+    <string name="mode_preferred">pref.</string>
+    <string name="mode_temporary">temp.</string>
+    <string name="mode_off">off</string>
+    <string name="mode">mode</string>
+    <string name="feature">feature</string>
+    <string name="intensity">intensity</string>
+    <string-array name="channel_types">
+        <item>user</item>
+        <item>current source</item>
+        <item>voltage source</item>
+        <item>PWM</item>
+        <item>switch</item>
+    </string-array>
+    <string name="channel_config_na">no channels available</string>
+    <string name="channel_config_invalid">invalid channel configurations</string>
+
+    <!-- kd2 channel config -->
+    <string name="kd2_unexpected">Unexpected channel setting</string>
+    <string name="kd2_led_channel">LED channel</string>
+    <string name="kd2_pwm_channel">PWM channel</string>
+    <string name="kd2_com_channel">Com pin PWM channel</string>
+    <string name="kd2_adaptive_channel">adaptive</string>
+    <string name="kd2_spot_channel">spot</string>
+    <string name="kd2_flood_channel">flood</string>
+
+    <!-- kd2 setup tab -->
+    <string name="kd2setup_fullPower">output power @ 100% (0W..40W)</string>
+    <string name="kd2setup_limit">output limit (0%..100%)</string>
+    <string name="kd2setup_optictype">optic type</string>
+    <string-array name="kd2setup_optics">
+        <item>n/a</item>
+        <item>spot</item>
+        <item>medium</item>
+        <item>flood</item>
+    </string-array>
+    <string name="kd2setup_angleOffset">optic offset (-20°..20°)</string>
+    <string name="kd2setup_comPin">com pin usage</string>
+    <string-array name="kd2setup_comPinArray">
+        <item>not used</item>
+        <item>communication</item>
+        <item>external button</item>
+        <item>PWM signal</item>
+    </string-array>
+    <string-array name="kd2setup_channel_names">
+        <item>Helena Spot (left side)</item>
+        <item>Helena Flood (right side)</item>
+        <item>Helen current</item>
+        <item>Helen PWM</item>
+        <item>Helen PWM on com pin</item>
+    </string-array>
+    <string name="kd2_incorrect_setup">
+        "Current channel setup does not match expected setup.\nDo you want to upload the correct setup?"</string>
+
+    <string-array name="KD2_op_codes">
+        <item>Channel configuration request</item>
+        <item>Channel configuration set</item>
+        <item>Communication pin configuration request</item>
+        <item>Communication pin configuration set</item>
+        <item>Internal compensation request</item>
+        <item>Internal Compensation set</item>
+        <item>External Compensation request</item>
+        <item>External Compensation set</item>
+    </string-array>
+    <string-array name="KD2_response_values">
+        <item>successful</item>
+        <item>not supported</item>
+        <item>invalid parameter supplied</item>
+        <item>failed</item>
+    </string-array>
+    <string name="KD2_unknown_response">unknown response received</string>
+
+    <!-- uart tab -->
+    <string name="enter_command">Enter command</string>
+
+    <!-- misc strings -->
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="reload">Reload</string>
+    <string name="upload">Upload</string>
+    <string name="send">Send</string>
+</resources>
