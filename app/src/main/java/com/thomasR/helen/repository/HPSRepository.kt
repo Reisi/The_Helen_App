@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import com.thomasR.helen.profile.helenProject.data.ControlPointEvent
 import com.thomasR.helen.profile.helenProject.data.EnableControlPoint
 import com.thomasR.helen.profile.helenProject.data.FactoryReset
+import com.thomasR.helen.profile.helenProject.data.HPSChannelConfig
 import com.thomasR.helen.profile.helenProject.data.HPSEventHandled
 import com.thomasR.helen.profile.helenProject.data.HPSCmd
 import com.thomasR.helen.profile.helenProject.data.HPSControlPointIndication
@@ -12,6 +13,7 @@ import com.thomasR.helen.profile.helenProject.data.HPSEvent
 import com.thomasR.helen.profile.helenProject.data.HPSFeatureData
 import com.thomasR.helen.profile.helenProject.data.HPSMeasurementData
 import com.thomasR.helen.profile.helenProject.data.HPSModeConfig
+import com.thomasR.helen.profile.helenProject.data.OverrideMode
 import com.thomasR.helen.profile.helenProject.data.ReadModes
 import com.thomasR.helen.profile.helenProject.data.RequestMode
 import com.thomasR.helen.profile.helenProject.data.RequestSearch
@@ -107,6 +109,10 @@ class HPSRepository(init: HPSData = HPSData()) {
 
     fun factoryReset() {
         _command.tryEmit((FactoryReset))
+    }
+
+    fun overrideMode(channelConfig: List<HPSChannelConfig>) {
+        _command.tryEmit(OverrideMode(channelConfig))
     }
 
     fun changeMode(mode: Int, config: HPSModeConfig) {

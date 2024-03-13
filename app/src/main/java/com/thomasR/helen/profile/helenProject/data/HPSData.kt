@@ -27,7 +27,8 @@ data class HPSFeatureChannelSize(
 data class HPSFeatureBits(
     val modeSetSupported: Boolean = false,
     val searchRequestSupported: Boolean = false,
-    val factoryResetSupported: Boolean = false
+    val factoryResetSupported: Boolean = false,
+    val modeOverrideSupported: Boolean = false
 )
 
 data class HPSFeatureData(
@@ -58,6 +59,7 @@ enum class HPSContorlPointOpCode(val id: Int) {
     SET_MODE(2),
     REQUEST_SEARCH(3),
     FACTORY_RESET(5),
+    OVERRIDE_MODE(8),
     RESPONSE_CODE(32)
 }
 

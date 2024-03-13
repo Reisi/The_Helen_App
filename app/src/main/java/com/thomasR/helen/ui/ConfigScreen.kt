@@ -230,13 +230,18 @@ fun ConfigScreen(
             }
         }
         if (modeCfg != null) {
+            var modeOverride: ((List<HPSChannelConfig>?) -> Unit)? = { helenViewModel.overrideMode(it) }
+            if (projectData.feature?.feature?.modeOverrideSupported != true) modeOverride = null
+
             ConfigDialog(
                 modeNo = selectedMode!!,
                 config = modeCfg,
                 channelSize = features.channelSize,
-                onCancel = { selectedMode = null },
                 profile = helenData.setupProfile,
                 channelsConfig = channelsConfigView,
+                onChannelsChanged = modeOverride,
+                controlPointEnabled = projectData.isControlPointEnabled == true,
+                onCancel = { selectedMode = null },
                 onDone = {
                     if (selectedMode != null) {
                         helenViewModel.updateMode(selectedMode!!, it)

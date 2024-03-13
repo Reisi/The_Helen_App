@@ -16,6 +16,7 @@ import com.thomasR.helen.profile.helenProject.HPSMeasurementDataParser
 import com.thomasR.helen.profile.helenProject.HPSModesDataParser
 import com.thomasR.helen.profile.helenProject.data.EnableControlPoint
 import com.thomasR.helen.profile.helenProject.data.HPSControlPointIndication
+import com.thomasR.helen.profile.helenProject.data.OverrideMode
 import com.thomasR.helen.repository.HPSRepository
 import com.thomasR.helen.repository.HelenRepository
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +28,8 @@ import kotlinx.coroutines.flow.onEach
 import no.nordicsemi.android.common.core.DataByteArray
 import no.nordicsemi.android.kotlin.ble.client.main.service.ClientBleGattService
 import no.nordicsemi.android.kotlin.ble.client.main.service.ClientBleGattServices
+import no.nordicsemi.android.kotlin.ble.core.errors.DeviceDisconnectedException
+import no.nordicsemi.android.kotlin.ble.core.errors.GattOperationException
 import java.util.UUID
 
 val HPS_SERVICE_UUID: UUID = UUID.fromString("4F770301-ED7D-11E4-840E-0002A5D5C51B")
@@ -58,6 +61,16 @@ class HelenProject(
         var controlPointEnabled = false
         lateinit var controlPointFlow: Flow<HPSControlPointIndication>
         var controlPointJob: Job? = null
+
+        suspend fun controlPointWrite(value: DataByteArray) {
+            try {
+                hpControlPoint.write(value)
+            } catch (e: GattOperationException) {
+                /* TODO ? */
+            } catch (e: DeviceDisconnectedException) {
+                // in case device gets disconnected
+            }
+        }
 
         repository.command
             .onEach {
@@ -93,24 +106,33 @@ class HelenProject(
 
                     }
                     is RequestMode -> if (controlPointEnabled) {
-                        hpControlPoint.write(DataByteArray(byteArrayOf(
+                        controlPointWrite(DataByteArray(byteArrayOf(
                                 HPSContorlPointOpCode.REQUEST_MODE.id.toByte()
                         )))
                     }
                     is SetMode -> if (controlPointEnabled) {
-                        hpControlPoint.write(DataByteArray(byteArrayOf(
+                        controlPointWrite(DataByteArray(byteArrayOf(
                                 HPSContorlPointOpCode.SET_MODE.id.toByte(), it.modeNo.toByte()
                         )))
                     }
                     is RequestSearch -> if (controlPointEnabled) {
-                        hpControlPoint.write(DataByteArray(byteArrayOf(
+                        controlPointWrite(DataByteArray(byteArrayOf(
                                 HPSContorlPointOpCode.REQUEST_SEARCH.id.toByte()
                         )))
                     }
                     is FactoryReset -> if (controlPointEnabled) {
-                        hpControlPoint.write(DataByteArray(byteArrayOf(
+                        controlPointWrite(DataByteArray(byteArrayOf(
                                 HPSContorlPointOpCode.FACTORY_RESET.id.toByte()
                         )))
+                    }
+                    is OverrideMode ->
+                    {
+                        val feature = repository.data.value.feature
+                        if (controlPointEnabled && feature != null) {
+                            var msg = byteArrayOf(HPSContorlPointOpCode.OVERRIDE_MODE.id.toByte())
+                            msg += HPSModesDataParser().encodeOverrideChannels(it.channelConfig, feature)
+                            controlPointWrite(DataByteArray(msg))
+                        }
                     }
                 }
             }

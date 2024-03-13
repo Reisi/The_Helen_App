@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.thomasR.helen.profile.dfu.data.Idle
+import com.thomasR.helen.profile.helenProject.data.HPSChannelConfig
 import com.thomasR.helen.profile.helenProject.data.HPSModeConfig
 import com.thomasR.helen.repository.HelenRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -57,6 +58,13 @@ class HelenViewModel(
 
     fun factoryReset() {
         repository.hps.factoryReset()
+    }
+
+    fun overrideMode(channelConfig: List<HPSChannelConfig>?) {
+        if (channelConfig == null)
+            repository.hps.setMode(255)
+        else
+            repository.hps.overrideMode(channelConfig)
     }
 
     fun clearProjectEvent() {

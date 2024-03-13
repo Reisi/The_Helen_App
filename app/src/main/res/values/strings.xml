@@ -103,6 +103,11 @@
         <item>Factory reset over Bluetooth not supported.</item>
         <item>Factory reset failed.</item>
     </string-array>
+    <string-array name="mode_override_status">
+        <item> </item> <!-- success is not shown as message -->
+        <item>mode override not supported.</item>
+        <item>mode override failed.</item>
+    </string-array>
     <string-array name="name_change_status">
         <item>Device name successfully changed</item>
         <item>Changing of device name not supported</item>

@@ -168,6 +168,16 @@ class HPSModesDataParser {
         return bytes
     }
 
+    fun encodeOverrideChannels(channels: List<HPSChannelConfig>, features: HPSFeatureData) : ByteArray {
+        var bytes = byteArrayOf()
+
+        for (i in channels.indices) {
+            bytes += encode8bitChannel(channels[i], features.channelSize[i])
+        }
+
+        return bytes
+    }
+
     private fun encode8bitChannel(config: HPSChannelConfig, channelSize: HPSFeatureChannelSize) : Byte {
         var byte = config.intensity.toByte()
         byte = byte or config.specialFeature.shl(channelSize.channelBitSize - channelSize.specialFeatureBitSize).toByte()

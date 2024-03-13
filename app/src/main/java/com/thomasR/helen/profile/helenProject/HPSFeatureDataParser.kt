@@ -48,7 +48,8 @@ class HPSFeatureDataParser {
         else HPSFeatureBits(
             modeSetSupported = (raw and 0x0001) != 0,
             searchRequestSupported = (raw and 0x0002) != 0,
-            factoryResetSupported = (raw and 0x0004) != 0
+            factoryResetSupported = (raw and 0x0004) != 0,
+            modeOverrideSupported = (raw and 0x0008) != 0
         )
     }
 

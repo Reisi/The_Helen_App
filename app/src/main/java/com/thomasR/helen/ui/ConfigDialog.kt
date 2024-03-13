@@ -1,5 +1,6 @@
 package com.thomasR.helen.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -41,29 +43,69 @@ fun ConfigDialog(
     channelSize: List<HPSFeatureChannelSize>,
     profile: Int?,
     channelsConfig: ChannelsConfigView = DefaultChannelsConfigView(),
+    onChannelsChanged: ((List<HPSChannelConfig>?) -> Unit)? = null,
+    controlPointEnabled: Boolean = false,
     onCancel: () -> Unit,
     onDone: (HPSModeConfig) -> Unit
 ) {
     var state by remember { mutableStateOf(config.copy()) }
     var valid by remember { mutableStateOf(true) }
+    var override by remember { mutableStateOf(false) }
     AlertDialog(
-        onDismissRequest = onCancel,
+        onDismissRequest = {
+            if (override && onChannelsChanged != null)
+                onChannelsChanged(null)
+            onCancel()
+        },
         dismissButton = {
-            TextButton(onClick = onCancel) {
+            TextButton(onClick = {
+                if (override && onChannelsChanged != null)
+                    onChannelsChanged(null)
+                onCancel()
+            }) {
                 Text(stringResource(R.string.cancel))
             }
         },
         confirmButton = {
-            TextButton(enabled = valid, onClick = { onDone(state) }) {
+            TextButton(enabled = valid, onClick = {
+                if (override && onChannelsChanged != null)
+                    onChannelsChanged(null)
+                onDone(state)
+            }) {
                 Text(stringResource(R.string.ok))
             }
         },
         title = {
-            Text(
+            Row (
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.mode) + " " + (modeNo + 1).toString(),
-                textAlign = TextAlign.Center
-            )
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Absolute.SpaceBetween
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(3f),
+                    text = stringResource(id = R.string.mode) + " " + (modeNo + 1).toString(),
+                    textAlign = TextAlign.Center
+                )
+                if (onChannelsChanged != null) {
+                    Switch(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        checked = override,
+                        onCheckedChange = {
+                            override = it
+                            if (!it) {
+                                onChannelsChanged(null)
+                            } else if (valid) {
+                                onChannelsChanged(state.channel)
+                            }
+                        },
+                        enabled = controlPointEnabled
+                    )
+                }
+            }
         },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -95,6 +137,8 @@ fun ConfigDialog(
                 ) { config, isValid ->
                     state = state.copy(channel = config)
                     valid = isValid
+                    if (override && isValid && onChannelsChanged != null)
+                        onChannelsChanged(config)
                 }
 
                 HorizontalDivider(
@@ -199,6 +243,8 @@ private fun StatusPreviewBright() {
                 HPSFeatureChannelSize(8, 3, HPSFeatureChannelDescription.PWM),
             ),
             profile = null,
+            onChannelsChanged = {  },
+            controlPointEnabled = true,
             onCancel = { /*TODO*/ },
             onDone = {})
     }

@@ -47,6 +47,8 @@ class HPSControlPointDataParser {
                 context.resources.getStringArray(R.array.initiate_search_status).toMutableList()[messageIndex]
             HPSContorlPointOpCode.FACTORY_RESET ->
                 context.resources.getStringArray(R.array.factory_reset_status).toMutableList()[messageIndex]
+            HPSContorlPointOpCode.OVERRIDE_MODE -> if (responseValue == HPSControlPointResponseValue.SUCCESS) null else
+                context.resources.getStringArray(R.array.mode_override_status).toMutableList()[messageIndex]
             else -> null
         }
     }
