@@ -8,8 +8,8 @@ import com.thomasR.helen.profile.helenProject.data.HPSFeatureData
 import com.thomasR.helen.profile.helenProject.data.HPSHelenModeConfig
 import com.thomasR.helen.profile.helenProject.data.HPSModeConfig
 import com.thomasR.helen.profile.helenProject.data.WriteModesResponse
-import no.nordicsemi.android.common.core.DataByteArray
-import no.nordicsemi.android.common.core.IntFormat
+import no.nordicsemi.android.kotlin.ble.core.data.util.DataByteArray
+import no.nordicsemi.android.kotlin.ble.core.data.util.IntFormat
 import kotlin.experimental.or
 
 class HPSModesDataParser {

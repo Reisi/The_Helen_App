@@ -72,13 +72,20 @@ fun SearchTopAppBar (
                     Text(menuStrings[0], Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_medium)))
                     // TODO replace with a list of dummy devices
                     for (dummy in dummyDevices) {
+                        val modelIcon = when (dummy.deviceInformationData.model) {
+                            "KD2" -> ImageVector.vectorResource(id = R.drawable.helen_icon)
+                            "Helena" -> ImageVector.vectorResource(id = R.drawable.helena_icon)
+                            else -> null
+                        }
+
                         DropdownMenuItem(
                             text = { Text(dummy.helenData.name!!) },
-                            leadingIcon = { Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.helen_icon),   // TODO model specific icon
-                                contentDescription = null,
-                                //tint = MaterialTheme.colorScheme.onSurface
-                            ) },
+                            leadingIcon = {
+                                if (modelIcon == null) {} else { Icon(
+                                    imageVector = modelIcon,
+                                    contentDescription = null,
+                                ) }
+                            },
                             onClick = { menuExpanded = false; addDummyDevice(dummy) }
                         )
                     }

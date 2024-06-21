@@ -79,7 +79,7 @@ class DfuRepository (
         model: String,
         hardwareRev: String,
     ) : String? {
-        val resString = model.lowercase() + "_" + hardwareRev.replace(".", "")
+        val resString = model.lowercase() + "_" + hardwareRev.replace(".", "").replace("/", "")
         val changelog = context.resources.getIdentifier(resString + "_changelog", "raw", context.packageName)
 
         return if (changelog == 0)
@@ -96,7 +96,7 @@ class DfuRepository (
         currentRev: String
     ) : String? {
         // try to get the resource identifiers (the expected format is "{model.lowercase()_hardwareRev.withoutPoints()})
-        val resString = model.lowercase() + "_" + hardwareRev.replace(".", "")
+        val resString = model.lowercase() + "_" + hardwareRev.replace(".", "").replace("/", "")
         val zip = context.resources.getIdentifier(resString, "raw", context.packageName)
         val changelog = context.resources.getIdentifier(resString + "_changelog", "raw", context.packageName)
 

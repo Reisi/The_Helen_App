@@ -1,8 +1,8 @@
 package com.thomasR.helen.profile.helenProject
 
 import com.thomasR.helen.profile.helenProject.data.HPSMeasurementData
-import no.nordicsemi.android.common.core.DataByteArray
-import no.nordicsemi.android.common.core.IntFormat
+import no.nordicsemi.android.kotlin.ble.core.data.util.DataByteArray
+import no.nordicsemi.android.kotlin.ble.core.data.util.IntFormat
 import kotlin.experimental.and
 
 class HPSMeasurementDataParser {

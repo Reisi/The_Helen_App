@@ -4,8 +4,8 @@ import com.thomasR.helen.profile.helenProject.data.HPSFeatureBits
 import com.thomasR.helen.profile.helenProject.data.HPSFeatureChannelDescription
 import com.thomasR.helen.profile.helenProject.data.HPSFeatureChannelSize
 import com.thomasR.helen.profile.helenProject.data.HPSFeatureData
-import no.nordicsemi.android.common.core.DataByteArray
-import no.nordicsemi.android.common.core.IntFormat
+import no.nordicsemi.android.kotlin.ble.core.data.util.DataByteArray
+import no.nordicsemi.android.kotlin.ble.core.data.util.IntFormat
 
 class HPSFeatureDataParser {
     fun parse(bytes: DataByteArray) : HPSFeatureData? {

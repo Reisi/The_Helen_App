@@ -137,35 +137,35 @@ class DummyDevices {
                 modes = listOf(
                     listOf(
                         HPSModeConfig(
-                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
-                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(20, 0),
-                                HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
-                        ),
-                        HPSModeConfig(
-                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
-                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(20, 0),
-                                HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
+                            HPSHelenModeConfig(ignored = false, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(2, 1), HPSChannelConfig(8, 1),
+                                HPSChannelConfig(2, 1), HPSChannelConfig(0, 0))
                         ),
                         HPSModeConfig(
                             HPSHelenModeConfig(ignored = false, preferred = false, temporary = false, off = false),
-                            listOf(HPSChannelConfig(4, 1), HPSChannelConfig(20, 0),
+                            listOf(HPSChannelConfig(4, 1), HPSChannelConfig(16, 1),
+                                HPSChannelConfig(4, 1), HPSChannelConfig(0, 0))
+                        ),
+                        HPSModeConfig(
+                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(0, 0),
                                 HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
                         ),
                         HPSModeConfig(
-                            HPSHelenModeConfig(ignored = false, preferred = false, temporary = false, off = false),
-                            listOf(HPSChannelConfig(16, 1), HPSChannelConfig(20, 0),
+                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(0, 0),
                                 HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
                         )
                     ), listOf(
                         HPSModeConfig(
-                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
-                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(0, 0),
+                            HPSHelenModeConfig(ignored = false, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(10, 0),
                                 HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
                         ),
                         HPSModeConfig(
-                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
-                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(0, 0),
-                                HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
+                            HPSHelenModeConfig(ignored = false, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(10, 0), HPSChannelConfig(0, 0),
+                                HPSChannelConfig(10, 0), HPSChannelConfig(0, 0))
                         ),
                         HPSModeConfig(
                             HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
@@ -213,6 +213,93 @@ class DummyDevices {
                         )
                     ),
                     comPinConfig = KD2ComPinConfig.NOT_USED
+                )
+            )
+        ),
+        DummyData(
+            helenData = HelenData(
+                name = "Helena",
+                address = "Helena with XHP35 and XHP50",
+                isHelenProjectSupported = true,
+                isKd2Supported = true,
+                isUartSupported = false,
+                nameChangeSupported = false
+            ),
+            deviceInformationData = DeviceInformationData(
+                model = "Helena",
+                hardwareRevision = "2.2/2.3",
+                firmwareRevision = "3.0-alpha"
+            ),
+            hpsData = HPSData(
+                measurement = HPSMeasurementData(3, 24.3f, 34.0f, 7.68f),
+                feature = HPSFeatureData(
+                    modeCount = 8,
+                    channelSize = listOf(
+                        HPSFeatureChannelSize(8, 3, HPSFeatureChannelDescription.CURRENT),
+                        HPSFeatureChannelSize(8, 3, HPSFeatureChannelDescription.CURRENT)
+                    ),
+                    feature = HPSFeatureBits(true, true, true)
+                ),
+                modes = listOf(
+                    listOf(
+                        HPSModeConfig(
+                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
+                        ),
+                        HPSModeConfig(
+                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
+                        ),
+                        HPSModeConfig(
+                            HPSHelenModeConfig(ignored = false, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(8, 1), HPSChannelConfig(4, 1))
+                        ),
+                        HPSModeConfig(
+                            HPSHelenModeConfig(ignored = false, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(20, 1), HPSChannelConfig(12, 1))
+                        )
+                    ), listOf(
+                        HPSModeConfig(
+                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
+                        ),
+                        HPSModeConfig(
+                            HPSHelenModeConfig(ignored = true, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(0, 0))
+                        ),
+                        HPSModeConfig(
+                            HPSHelenModeConfig(ignored = false, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(10, 0), HPSChannelConfig(0, 0))
+                        ),
+                        HPSModeConfig(
+                            HPSHelenModeConfig(ignored = false, preferred = false, temporary = false, off = false),
+                            listOf(HPSChannelConfig(0, 0), HPSChannelConfig(10, 0))
+                        )
+                    )
+                )
+            ),
+            kD2Data = KD2Data(
+                feature = KD2Feature(
+                    KD2ConfigFeatures(channelConfigSupported = true, comPinModeSupported = true),
+                    KD2ChannelFeature(adaptiveSupported = true)
+                ),
+                KD2ControlPointData(
+                    channelConfigs = listOf(
+                        KD2ChannelSetup(
+                            fullOutputPower = 18.0f,
+                            outputLimit = 85,
+                            opticType = KD2OpticType.FLOOD,
+                            opticOffset = -4.3f
+                        ),
+                        KD2ChannelSetup(
+                            fullOutputPower = 18.0f,
+                            outputLimit = 85,
+                            opticType = KD2OpticType.SPOT,
+                            opticOffset = 4.3f
+                        )
+                    ),
+                    comPinConfig = KD2ComPinConfig.NOT_USED,
+                    isImuCalibrated = false
                 )
             )
         )

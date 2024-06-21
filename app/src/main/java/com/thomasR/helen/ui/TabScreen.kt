@@ -49,12 +49,10 @@ import no.nordicsemi.android.kotlin.ble.core.data.GattConnectionState
 
 /// TODO move to KD2 specific class/file
 private fun isKD2SetupNecessary(
-    model: String?,
     isSupported: Boolean?,
     isExpertMode: Boolean,
     isComPinModeSupported: Boolean
 ) : Boolean {
-    if (model != "KD2") return false
     if (isSupported != true) return false
     if (!isExpertMode && !isComPinModeSupported) return false
     return true
@@ -84,13 +82,20 @@ fun TabScreen(
     // KD2 models
     if (helenData.isUartSupported != true)
         availableTabs.remove(allTabs[3])
-    if (!isKD2SetupNecessary(
-            model = info.model,
-            isSupported = helenData.isKd2Supported,
-            isExpertMode = helenData.setupProfile == null,
-            isComPinModeSupported = kd2Data.feature.configFeatures.comPinModeSupported
-        ))
-        availableTabs.remove(allTabs[2])
+    when (info.model) {
+        "KD2" -> {
+            if (!isKD2SetupNecessary(
+                    isSupported = helenData.isKd2Supported,
+                    isExpertMode = helenData.setupProfile == null,
+                    isComPinModeSupported = kd2Data.feature.configFeatures.comPinModeSupported
+                ))
+                availableTabs.remove(allTabs[2])
+        }
+        "Helena" -> {
+            if (helenData.isKd2Supported != true)
+                availableTabs.remove(allTabs[2])
+        }
+    }
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember {SnackbarHostState()}
@@ -115,6 +120,7 @@ fun TabScreen(
 
     val channelsConfigView = when(info.model) {
         "KD2" -> getKD2ChannelConfigView(projectData.feature?.channelSize, kd2Data.feature.channelFeature)
+        "Helena" -> HelenaChannelsConfigView(features = kd2Data.feature.channelFeature)
         else -> DefaultChannelsConfigView()
     }
 
@@ -212,16 +218,25 @@ fun TabScreen(
                     channelsConfigView = channelsConfigView
                 )
 
-                allTabs[2] -> if (helenData.isKd2Supported == true) {
-                    KD2SetupScreen(
-                        modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_medium)),
-                        channelSize = projectData.feature?.channelSize,
-                        //expertMode = helenData.setupProfile == null,
-                        repository = repository,
-                        showSnackBar = {scope.launch {
+                allTabs[2] -> {
+                    when (info.model) {
+                        "KD2" -> KD2SetupScreen(
+                            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_medium)),
+                            channelSize = projectData.feature?.channelSize,
+                            repository = repository,
+                            showSnackBar = {scope.launch {
                                 snackbarHostState.showSnackbar(it)
                             } }
-                    )
+                        )
+                        "Helena" -> HelenaSetupScreen(
+                            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_medium)),
+                            channelSize = projectData.feature?.channelSize,
+                            repository = repository,
+                            showSnackBar = {scope.launch {
+                                snackbarHostState.showSnackbar(it)
+                            } }
+                        )
+                    }
                 }
 
                 allTabs[3] -> if (helenData.isUartSupported == true) {

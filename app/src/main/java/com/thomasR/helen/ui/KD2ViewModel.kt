@@ -44,6 +44,10 @@ class KD2ViewModel(private val repository: HelenRepository) : ViewModel() {
         repository.kd2.setComPinConfig(config)
     }
 
+    fun startImuCalibration() {
+        repository.kd2.startImuCalibration()
+    }
+
     fun setIgnoreWrongSetup(ignore: Boolean) {
         repository.setIgnoreSetup(ignore)
     }

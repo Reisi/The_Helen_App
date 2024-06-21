@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -50,7 +49,6 @@ import com.thomasR.helen.profile.kd2.data.KD2OpticType
 import com.thomasR.helen.profile.kd2.KD2ControlPointDataParser
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointCommonResponse
 import com.thomasR.helen.repository.HelenRepository
-import com.thomasR.helen.repository.KD2Repository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -116,7 +114,11 @@ fun KD2SetupScreen(
                     KD2ChannelSetup(
                         channelName = channelNames[i + nameOffset],
                         channelConfig = channelConfigs[i],
-                        onChanged = { config, valid -> isValid = valid; viewModel.updateChannelConfig(i, config) }
+                        onChanged = { config, valid ->
+                            isValid = valid;
+                            if (isValid)
+                                viewModel.updateChannelConfig(i, config)
+                        }
                     )
                     ReloadUpload(
                         onReloadClick = { viewModel.reloadChannelConfig(i) },
@@ -149,7 +151,7 @@ fun KD2SetupScreen(
 
     if (showSetupDialog) {
         AlertDialog(
-            text = {Text(stringResource(id = R.string.kd2_incorrect_setup))},
+            text = {Text(stringResource(id = R.string.kd2setup_incorrect_setup))},
             onDismissRequest = { showSetupDialog = false; viewModel.setIgnoreWrongSetup(true) },
             confirmButton = {
                 TextButton(
@@ -190,10 +192,10 @@ fun KD2ChannelSetup(
     var expanded by remember { mutableStateOf(false) }
     val optics = stringArrayResource(id = R.array.kd2setup_optics).toList()
 
-    var power by rememberSaveable(channelConfig) { mutableStateOf(channelConfig.fullOutputPower.toString()) }
-    var limit by rememberSaveable(channelConfig) { mutableStateOf(channelConfig.outputLimit.toString()) }
-    var optic by rememberSaveable(channelConfig) { mutableIntStateOf(channelConfig.opticType.ordinal) }
-    var offset by rememberSaveable(channelConfig) { mutableStateOf(channelConfig.opticOffset.toString()) }
+    var power by rememberSaveable() { mutableStateOf(channelConfig.fullOutputPower.toString()) }
+    var limit by rememberSaveable() { mutableStateOf(channelConfig.outputLimit.toString()) }
+    var optic by rememberSaveable() { mutableIntStateOf(channelConfig.opticType.ordinal) }
+    var offset by rememberSaveable() { mutableStateOf(channelConfig.opticOffset.toString()) }
 
     Column(modifier = modifier.fillMaxWidth()) {
         if (channelName != null) {
@@ -302,8 +304,12 @@ private fun isChannelSetupValid(
 ) : Pair<KD2ChannelSetup, Boolean> {
     val valid = isPowerValid(power) && isLimitValid(limit) && opticType != null && isOffsetValid(opticOffset)
 
+    val fPower = if (power.length != 0) power.toFloatOrNull() else null
+    val iLimit = if (limit.length != 0) limit.toIntOrNull() else null
+    val fOffset = if (opticOffset.length != 0) opticOffset.toFloatOrNull() else null
+
     return Pair(
-        KD2ChannelSetup(power.toFloat(), limit.toInt(), opticType ?: KD2OpticType.NA, opticOffset.toFloat()),
+        KD2ChannelSetup(fPower ?: 0f, iLimit ?: 0, opticType ?: KD2OpticType.NA, fOffset ?: 0f),
         valid
     )
 }
@@ -329,7 +335,7 @@ private fun isOffsetValid(offset: String) : Boolean {
     return true
 }
 
-inline fun <reified T : Enum<T>> Int.toEnum(): T? {
+private inline fun <reified T : Enum<T>> Int.toEnum(): T? {
     return enumValues<T>().firstOrNull { it.ordinal == this }
 }
 
@@ -341,8 +347,9 @@ private fun KD2ComPinSetup(
     onSelectionChanged: (KD2ComPinConfig) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    //var setup by rememberSaveable(comPinSetup.ordinal) { mutableIntStateOf(comPinSetup.ordinal) }
     val options = stringArrayResource(id = R.array.kd2setup_comPinArray).toList()
+
+    Text(text = stringResource(id = R.string.kd2setup_comPin), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
 
     ExposedDropdownMenuBox(
         modifier = modifier,
@@ -356,7 +363,6 @@ private fun KD2ComPinSetup(
             readOnly = true,
             value = options[comPinSetup.ordinal],
             onValueChange = { },
-            label = {Text(stringResource(id = R.string.kd2setup_comPin))},
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
         )
         ExposedDropdownMenu(

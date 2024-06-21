@@ -14,6 +14,8 @@ enum class KD2ControlPointOpCode(val id: Int) {
     SET_INTERNAL_COMP(6),
     REQUEST_EXTERNAL_COMP(7),
     SET_EXTERNAL_COMP(8),
+    REQUEST_IMU_CALIBRATION_STATE(9),
+    START_IMU_CALIBRATION(10),
     RESPONSE_CODE(32)
 }
 
@@ -70,6 +72,10 @@ data class KD2ControlPointExternalCompReceived(
     val compensation: KD2ExternalComp
 ) : KD2ControlPointIndication()
 
+data class KD2ControlPointImuCalibrationStateReceived(
+    val isCalibrated: Boolean
+) : KD2ControlPointIndication()
+
 sealed class KD2ControlPointCommand
 
 data class KD2ControlPointRequestChannelConfig(
@@ -98,3 +104,7 @@ object KD2ControlPointRequestExternalComp : KD2ControlPointCommand()
 data class KD2ControlPointSetExternalComp(
     val externalComp: KD2ExternalComp
 ) : KD2ControlPointCommand()
+
+object KD2ControlPointRequestImuCalibrationState: KD2ControlPointCommand()
+
+object KD2ControlPointStartImuCalibration : KD2ControlPointCommand()

@@ -163,7 +163,7 @@
     <string name="kd2_spot_channel">spot</string>
     <string name="kd2_flood_channel">flood</string>
 
-    <!-- kd2 setup tab -->
+    <!-- kd2 / helena setup tab -->
     <string name="kd2setup_fullPower">output power @ 100% (0W..40W)</string>
     <string name="kd2setup_limit">output limit (0%..100%)</string>
     <string name="kd2setup_optictype">optic type</string>
@@ -182,14 +182,22 @@
         <item>PWM signal</item>
     </string-array>
     <string-array name="kd2setup_channel_names">
-        <item>Helena Spot (left side)</item>
-        <item>Helena Flood (right side)</item>
+        <item>Helena current (left side)</item>
+        <item>Helena current (right side)</item>
         <item>Helen current</item>
         <item>Helen PWM</item>
         <item>Helen PWM on com pin</item>
     </string-array>
-    <string name="kd2_incorrect_setup">
-        "Current channel setup does not match expected setup.\nDo you want to upload the correct setup?"</string>
+    <string name="kd2setup_imu_calibration">imu calibration</string>
+    <string name="kd2setup_calibrate">Calibrate</string>
+    <string name="kd2setup_recalibrate">Recalibrate</string>
+    <string name="kd2setup_calibration_notice">
+        "To calibrate the imu sensor put the device in a position where it either points exactly up or down and tap calibrate.\n
+        After calibration please power cycle your device."
+    </string>
+    <string name="kd2setup_incorrect_setup">
+        "Current channel setup does not match expected setup.\nDo you want to upload the correct setup?"
+    </string>
 
     <string-array name="KD2_op_codes">
         <item>Channel configuration request</item>
@@ -197,9 +205,11 @@
         <item>Communication pin configuration request</item>
         <item>Communication pin configuration set</item>
         <item>Internal compensation request</item>
-        <item>Internal Compensation set</item>
-        <item>External Compensation request</item>
-        <item>External Compensation set</item>
+        <item>Internal compensation set</item>
+        <item>External compensation request</item>
+        <item>External compensation set</item>
+        <item>Imu calibration state request</item>
+        <item>Imu calibration start</item>
     </string-array>
     <string-array name="KD2_response_values">
         <item>successful</item>

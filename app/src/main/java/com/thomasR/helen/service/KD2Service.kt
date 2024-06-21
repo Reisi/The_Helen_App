@@ -16,16 +16,20 @@ import com.thomasR.helen.profile.kd2.data.KD2ControlPointChannelConfigReceived
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointComPinConfigReceived
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointCommonResponse
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointExternalCompReceived
+import com.thomasR.helen.profile.kd2.data.KD2ControlPointImuCalibrationStateReceived
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointInternalCompReceived
+import com.thomasR.helen.profile.kd2.data.KD2ControlPointRequestImuCalibrationState
+import com.thomasR.helen.profile.kd2.data.KD2ControlPointStartImuCalibration
 import com.thomasR.helen.repository.KD2Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import no.nordicsemi.android.common.core.DataByteArray
+//import no.nordicsemi.android.common.core.DataByteArray
 import no.nordicsemi.android.kotlin.ble.client.main.service.ClientBleGattService
 import no.nordicsemi.android.kotlin.ble.client.main.service.ClientBleGattServices
+import no.nordicsemi.android.kotlin.ble.core.data.util.DataByteArray
 import no.nordicsemi.android.kotlin.ble.core.errors.DeviceDisconnectedException
 import no.nordicsemi.android.kotlin.ble.core.errors.GattOperationException
 import java.util.UUID
@@ -64,6 +68,8 @@ class KD2Service(
                         repository.updateInternalComp(it.compensation)
                     is KD2ControlPointExternalCompReceived ->
                         repository.updateExternalComp(it.compensation)
+                    is KD2ControlPointImuCalibrationStateReceived ->
+                        repository.updateImuCalibrationState(it.isCalibrated)
                     else -> {}
                 }
             }
@@ -110,7 +116,12 @@ class KD2Service(
                         byteArrayOf(KD2ControlPointOpCode.SET_EXTERNAL_COMP.id.toByte()) +
                         KD2ControlPointDataParser().encodeExternalComp(it.externalComp)
                     ))
-
+                    is KD2ControlPointRequestImuCalibrationState -> controlPointWrite(DataByteArray(
+                        byteArrayOf(KD2ControlPointOpCode.REQUEST_IMU_CALIBRATION_STATE.id.toByte())
+                    ))
+                    is KD2ControlPointStartImuCalibration -> controlPointWrite(DataByteArray(
+                        byteArrayOf(KD2ControlPointOpCode.START_IMU_CALIBRATION.id.toByte())
+                    ))
                 }
             }
             .launchIn(scope)
@@ -136,6 +147,8 @@ class KD2Service(
                 controlPointWrite(DataByteArray(byteArrayOf(KD2ControlPointOpCode.REQUEST_INTERNAL_COMP.id.toByte())))
             if (repository.data.value.feature.configFeatures.externalCompensationSupported)
                 controlPointWrite(DataByteArray(byteArrayOf(KD2ControlPointOpCode.REQUEST_EXTERNAL_COMP.id.toByte())))
+            if (repository.data.value.feature.configFeatures.imuCalibrationSupported)
+                controlPointWrite(DataByteArray(byteArrayOf(KD2ControlPointOpCode.REQUEST_IMU_CALIBRATION_STATE.id.toByte())))
         }
     }
 }

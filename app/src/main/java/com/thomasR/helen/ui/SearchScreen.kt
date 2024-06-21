@@ -584,7 +584,7 @@ private fun SwipeableDeviceListItem(
 private fun getModelVector(model: String?) : ImageVector? {
     val imageResourceId: Int = when(model) {
         "KD2" -> R.drawable.helen_icon
-        //"Helena" -> R.drawable.helena_list_icon
+        "Helena" -> R.drawable.helena_icon
         else -> return null
     }
 

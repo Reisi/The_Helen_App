@@ -25,9 +25,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
-import no.nordicsemi.android.common.core.DataByteArray
+//import no.nordicsemi.android.common.core.DataByteArray
 import no.nordicsemi.android.kotlin.ble.client.main.service.ClientBleGattService
 import no.nordicsemi.android.kotlin.ble.client.main.service.ClientBleGattServices
+import no.nordicsemi.android.kotlin.ble.core.data.util.DataByteArray
 import no.nordicsemi.android.kotlin.ble.core.errors.DeviceDisconnectedException
 import no.nordicsemi.android.kotlin.ble.core.errors.GattOperationException
 import java.util.UUID
@@ -59,7 +60,7 @@ class HelenProject(
             throw Exception("helen project service not available")
 
         var controlPointEnabled = false
-        lateinit var controlPointFlow: Flow<HPSControlPointIndication>
+        //lateinit var controlPointFlow: Flow<HPSControlPointIndication>
         var controlPointJob: Job? = null
 
         suspend fun controlPointWrite(value: DataByteArray) {
@@ -69,6 +70,20 @@ class HelenProject(
                 /* TODO ? */
             } catch (e: DeviceDisconnectedException) {
                 // in case device gets disconnected
+            }
+        }
+
+        suspend fun controlPointEnable(enable: Boolean) {
+            if (enable != (controlPointJob == null))
+                throw Exception("control point already in desired state")
+            if (enable) {
+                controlPointJob = hpControlPoint.getNotifications()
+                    .mapNotNull { HPSControlPointDataParser().decode(it) }
+                    .onEach { repository.onHPSControlPointIndicationReceived(it) }
+                    .launchIn(scope)
+            } else {
+                controlPointJob?.cancel()
+                controlPointJob = null
             }
         }
 
@@ -94,7 +109,8 @@ class HelenProject(
                     is EnableControlPoint -> {
                         controlPointEnabled = it.enabled
                         repository.onControlPointEnableChanged(it.enabled)
-                        if (it.enabled) {
+                        controlPointEnable(it.enabled)
+                        /*if (it.enabled) {
                             Log.d("HelenProject", "control point hash ${hpControlPoint.hashCode()}")
                             controlPointJob = controlPointFlow.launchIn(scope)
                             //hpControlPointCccd.write(DataByteArray(byteArrayOf(0x02, 0x00)))
@@ -102,7 +118,7 @@ class HelenProject(
                             controlPointJob?.cancel()
                             controlPointJob = null
                         //hpControlPointCccd.write(DataByteArray(byteArrayOf(0x00, 0x00)))
-                        }
+                        }*/
 
                     }
                     is RequestMode -> if (controlPointEnabled) {
@@ -147,14 +163,16 @@ class HelenProject(
 
         repository.onHPSModeConfigRead(HPSModesDataParser().decode(hpModes.read(), repository.data.value.feature!!))
 
-        controlPointFlow = hpControlPoint.getNotifications()
-            .mapNotNull { HPSControlPointDataParser().decode(it) }
-            .onEach { repository.onHPSControlPointIndicationReceived(it) }
+        //controlPointFlow = hpControlPoint.getNotifications()
+        //    .mapNotNull { HPSControlPointDataParser().decode(it) }
+        //    .onEach { repository.onHPSControlPointIndicationReceived(it) }
             //.launchIn(scope)
 
         controlPointEnabled = HPSControlPointDataParser().isIndicationEnabled(hpControlPointCccd.read())
         repository.onControlPointEnableChanged(controlPointEnabled)
-        if (controlPointEnabled) { controlPointJob = controlPointFlow.launchIn(scope) }
+        if (controlPointEnabled)
+            controlPointEnable(controlPointEnabled)
+        //if (controlPointEnabled) { controlPointJob = controlPointFlow.launchIn(scope) }
 
         return// hpService
     }

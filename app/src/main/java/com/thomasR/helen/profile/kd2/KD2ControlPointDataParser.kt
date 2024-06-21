@@ -14,9 +14,10 @@ import com.thomasR.helen.profile.kd2.data.KD2ControlPointChannelConfigReceived
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointComPinConfigReceived
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointCommonResponse
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointExternalCompReceived
+import com.thomasR.helen.profile.kd2.data.KD2ControlPointImuCalibrationStateReceived
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointInternalCompReceived
-import no.nordicsemi.android.common.core.DataByteArray
-import no.nordicsemi.android.common.core.IntFormat
+import no.nordicsemi.android.kotlin.ble.core.data.util.DataByteArray
+import no.nordicsemi.android.kotlin.ble.core.data.util.IntFormat
 
 class KD2ControlPointDataParser {
     fun decode(bytes: DataByteArray) : KD2ControlPointIndication? {
@@ -47,6 +48,10 @@ class KD2ControlPointDataParser {
             KD2ControlPointOpCode.REQUEST_EXTERNAL_COMP ->
                 return KD2ControlPointExternalCompReceived(
                     decodeExternalComp(bytes.copyOfRange(3, bytes.value.size))
+                )
+            KD2ControlPointOpCode.REQUEST_IMU_CALIBRATION_STATE ->
+                return KD2ControlPointImuCalibrationStateReceived(
+                    decodeImuCalibrationState(bytes.copyOfRange(3, bytes.value.size))
                 )
             else -> return KD2ControlPointCommonResponse(opCode, responseValue)
         }
@@ -160,6 +165,10 @@ class KD2ControlPointDataParser {
             getExternalCurrentGain(rightGain),
             getExternalTempOffset(offset)
         )
+    }
+
+    private fun decodeImuCalibrationState(bytes: DataByteArray) : Boolean {
+        return bytes.getIntValue(IntFormat.FORMAT_UINT8, 0) != 0
     }
 
     private fun getPower(raw: UShort) : Float { return raw.toFloat() / 1000f }

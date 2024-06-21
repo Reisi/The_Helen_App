@@ -14,6 +14,6 @@ data class HelenData(
     val isUartSupported: Boolean? = null,
     val nameChangeSupported: Boolean? = null,
 
-    val setupProfile: Int? = 0,//null,
+    val setupProfile: Int? = null,
     val ignoreWrongSetup: Boolean = false
 )

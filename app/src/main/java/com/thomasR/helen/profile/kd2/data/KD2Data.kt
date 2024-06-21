@@ -14,7 +14,8 @@ data class KD2ConfigFeatures(
     val channelConfigSupported: Boolean = false,
     val comPinModeSupported: Boolean = false,
     val internalCompensationSupported: Boolean = false,
-    val externalCompensationSupported: Boolean = false
+    val externalCompensationSupported: Boolean = false,
+    val imuCalibrationSupported: Boolean = false,
 )
 
 data class KD2ChannelFeature(
@@ -25,6 +26,7 @@ data class KD2ControlPointData(
     val channelConfigs: List<KD2ChannelSetup> = emptyList(),
     val comPinConfig: KD2ComPinConfig? = null,
     val internalComp: KD2InternalComp? = null,
-    val externalComp: KD2ExternalComp? = null
+    val externalComp: KD2ExternalComp? = null,
+    val isImuCalibrated: Boolean? = null
 )
 

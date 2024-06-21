@@ -336,7 +336,7 @@ class HelenService : NotificationService() {
 
         when (deviceRepository.dis.data.value.model) {
             // when adding new models, handling of not supported cannot be done in else part of when
-            "KD2" -> {
+            "KD2", "Helena" -> {
                 try {
                     KD2Service(
                         repository = deviceRepository.kd2,

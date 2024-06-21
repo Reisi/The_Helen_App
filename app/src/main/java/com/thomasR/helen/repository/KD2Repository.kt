@@ -9,16 +9,19 @@ import com.thomasR.helen.profile.kd2.data.KD2ControlPointIndication
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointRequestChannelConfig
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointRequestComPinConfig
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointRequestExternalComp
+import com.thomasR.helen.profile.kd2.data.KD2ControlPointRequestImuCalibrationState
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointRequestInternalComp
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointResponseHandled
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointSetChannelConfig
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointSetComPinConfig
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointSetExternalComp
 import com.thomasR.helen.profile.kd2.data.KD2ControlPointSetInternalComp
+import com.thomasR.helen.profile.kd2.data.KD2ControlPointStartImuCalibration
 import com.thomasR.helen.profile.kd2.data.KD2Data
 import com.thomasR.helen.profile.kd2.data.KD2ExternalComp
 import com.thomasR.helen.profile.kd2.data.KD2Feature
 import com.thomasR.helen.profile.kd2.data.KD2InternalComp
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -93,6 +96,13 @@ class KD2Repository(init: KD2Data = KD2Data()) {
         }
     }
 
+    fun updateImuCalibrationState(isCalibrated: Boolean) {
+        _data.update {
+            val controlPointData = it.controlPointData.copy(isImuCalibrated = isCalibrated)
+            it.copy(controlPointData = controlPointData)
+        }
+    }
+
     fun requestChannelConfig(channel: Int) {
         _command.tryEmit(KD2ControlPointRequestChannelConfig(channel))
     }
@@ -123,6 +133,14 @@ class KD2Repository(init: KD2Data = KD2Data()) {
 
     fun retExternalComp(comp: KD2ExternalComp) {
         _command.tryEmit(KD2ControlPointSetExternalComp(comp))
+    }
+
+    fun requestImuCalibrationState() {
+        _command.tryEmit(KD2ControlPointRequestImuCalibrationState)
+    }
+
+    fun startImuCalibration() {
+        _command.tryEmit(KD2ControlPointStartImuCalibration)
     }
 
     fun clear() {

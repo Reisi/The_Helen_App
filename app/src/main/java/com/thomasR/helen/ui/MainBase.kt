@@ -88,7 +88,7 @@ fun MainBase(
                 navController.navigate(route = "SearchDeviceList")
         }
 
-        composable(
+        /*composable(
             route = "dfu/{deviceAddress}",
             arguments = listOf(navArgument("deviceAddress") {type = NavType.StringType})
         ) {
@@ -99,6 +99,6 @@ fun MainBase(
                 DfuScreen(address = deviceAddress)
             }
         //Text(text = "dfu screen for device $deviceAddress")
-        }
+        }*/
     }
 }

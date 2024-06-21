@@ -6,9 +6,8 @@ import com.thomasR.helen.profile.helenProject.data.ControlPointEvent
 import com.thomasR.helen.profile.helenProject.data.HPSContorlPointOpCode
 import com.thomasR.helen.profile.helenProject.data.HPSControlPointIndication
 import com.thomasR.helen.profile.helenProject.data.HPSControlPointResponseValue
-import com.thomasR.helen.profile.kd2.data.KD2ControlPointCommonResponse
-import no.nordicsemi.android.common.core.DataByteArray
-import no.nordicsemi.android.common.core.IntFormat
+import no.nordicsemi.android.kotlin.ble.core.data.util.DataByteArray
+import no.nordicsemi.android.kotlin.ble.core.data.util.IntFormat
 
 class HPSControlPointDataParser {
     fun isIndicationEnabled(bytes: DataByteArray): Boolean {

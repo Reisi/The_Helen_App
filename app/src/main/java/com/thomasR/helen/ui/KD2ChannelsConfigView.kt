@@ -262,23 +262,23 @@ class KD23ChannelsConfigView(
             } else {
                 Row (verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.high_beam),
-                        contentDescription = null,
-                        modifier.size(32.dp)
-                    )
-                    Text(
-                        text = "%3d%%".format(spot * 5),
-                        modifier = Modifier.fillMaxHeight()
-                    )
-                }
-                Row (verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.flood_beam),
                         contentDescription = null,
                         modifier.size(32.dp)
                     )
                     Text(
                         text = "%3d%%".format(flood * 5),
+                        modifier = Modifier.fillMaxHeight()
+                    )
+                }
+                Row (verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.high_beam),
+                        contentDescription = null,
+                        modifier.size(32.dp)
+                    )
+                    Text(
+                        text = "%3d%%".format(spot * 5),
                         modifier = Modifier.fillMaxHeight()
                     )
                 }
@@ -325,7 +325,7 @@ class KD23ChannelsConfigView(
                             onChanged(config, true)
                         }
                     ) {
-                        val icon = if (channelsConfig[0].specialFeature != 0)
+                        val icon = if (adaptive)
                             ImageVector.vectorResource(R.drawable.adaptive_beam)
                         else
                             ImageVector.vectorResource(R.drawable.adaptive_beam_disabled)
@@ -335,7 +335,7 @@ class KD23ChannelsConfigView(
                 if (adaptive) {
                     ChannelView(
                         name = stringResource(id = R.string.kd2_adaptive_channel),
-                        value = spot.toFloat()
+                        value = spot.toFloat(),
                     ) {
                         val config = decodeSpotFlood(true, it.toInt()).toMutableList()
                         config.addAll(channelsConfig.drop(3))
@@ -347,10 +347,10 @@ class KD23ChannelsConfigView(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f),
-                            name = stringResource(id = R.string.kd2_spot_channel),
-                            value = spot.toFloat()
+                            name = stringResource(id = R.string.kd2_flood_channel),
+                            value = flood.toFloat()
                         ) {
-                            val config = decodeSpotFlood(false, it.toInt(), flood).toMutableList()
+                            val config = decodeSpotFlood(false, spot, it.toInt()).toMutableList()
                             config.addAll(channelsConfig.drop(3))
                             onChanged(config, true)
                         }
@@ -358,10 +358,10 @@ class KD23ChannelsConfigView(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f),
-                            name = stringResource(id = R.string.kd2_flood_channel),
-                            value = flood.toFloat()
+                            name = stringResource(id = R.string.kd2_spot_channel),
+                            value = spot.toFloat()
                         ) {
-                            val config = decodeSpotFlood(false, spot, it.toInt()).toMutableList()
+                            val config = decodeSpotFlood(false, it.toInt(), flood).toMutableList()
                             config.addAll(channelsConfig.drop(3))
                             onChanged(config, true)
                         }
@@ -441,14 +441,21 @@ class KD23ChannelsConfigView(
         return true
     }
 
+    // With the same output power flood and spot intensity would be the same value in adaptive mode.
+    // But the spot is driven by two drivers and has therefore twice the output power and the flood
+    // is equipped with an elliptical optic which basically halves the ground intensity. Therefore
+    // the output intensity for the flood channel needs to be four times higher than the spot
+    // intensity
     private fun encodeSpotFlood(
         config: List<HPSChannelConfig>
     ) : Triple<Boolean, Int, Int> {
         // if at least one channel is adaptive, all channels will be treated like that
         return if (config[0].specialFeature != 0 || config[1].specialFeature != 0 || config[2].specialFeature != 0) {
-            // in adaptive mode the settings is determined by the brightest spot
-            // TODO create mapping table, for now just the spot is returned
-            val intensity = maxOf(config[0].intensity, config[2].intensity)
+            // in adaptive mode the settings is determined brightest channel
+            val intensity = minOf(
+                20,
+                maxOf(config[0].intensity * 2, config[1].intensity / 2, config[2].intensity * 2)
+            )
             Triple(true, intensity, intensity)
         } else {
             // in non adaptive mode the brightest spot defines the spot overall
@@ -466,10 +473,9 @@ class KD23ChannelsConfigView(
         val config = mutableListOf<HPSChannelConfig>()
 
         if (adaptive) {
-            // TODO create mapping table, for now just functional dummy
-            config.add(HPSChannelConfig(spot, 1))
-            config.add(HPSChannelConfig(spot / 2, 1))
-            config.add(HPSChannelConfig(spot, 1))
+            config.add(HPSChannelConfig(minOf(spot / 2, 20), 1))
+            config.add(HPSChannelConfig(minOf(spot * 2, 20), 1))
+            config.add(HPSChannelConfig(minOf(spot / 2, 20), 1))
         } else {
             config.add(HPSChannelConfig(spot, 0))
             config.add(HPSChannelConfig(flood!!, 0))
